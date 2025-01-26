@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Stock Ticker Tracker</title>
+    <style>
+      html, body {
+        margin: 0;       /* Remove default browser margins */
+        padding: 0;      /* Remove default browser padding  */
+        background-color: #121212; /* Dark background */
+        color: white; /* White text color */
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      /* Header with two lines of text */
+      .header {
+        text-align: center;
+        padding: 10px 0; /* Reduced padding around header text */
+      }
+      .header h1 {
+        margin: 0 0 5px 0; 
+      }
+      .header p {
+        margin: 0;
+      }
+
+      /* Wrapper for stock cards */
+      .stock-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px; /* Reduced gap between cards */
+        justify-content: center;
+        padding: 10px; /* Reduced padding around container */
+      }
+
+      .stock-card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 10px; /* Reduced padding inside the card */
+        width: 200px;
+        height: 120px; /* Smaller height */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: white;
+      }
+      .stock-card.positive {
+        background-color: #4CAF50; /* Green */
+      }
+      .stock-card.negative {
+        background-color: #F44336; /* Red */
+      }
+      .stock-card h2 {
+        font-size: 1.2em;
+        margin: 0;
+      }
+      .stock-card p {
+        margin: 3px 0; /* Reduced margin around text */
+      }
+    </style>
+    <script>
+      let currentIndex = 0;
+      let stocksData = [];
+
+      async function fetchStockData() {
+        const response = await fetch('/get_stock_data');
+        stocksData = await response.json();
+        displayNextBatch();
+      }
+
+      function displayNextBatch() {
+        const container = document.querySelector('.stock-container');
+        container.innerHTML = ''; // Clear previous batch
+
+        const batch = stocksData.slice(currentIndex, currentIndex + 6);
+        batch.forEach(stock => {
+          const card = document.createElement('div');
+          card.className = `stock-card ${stock.price_change >= 0 ? 'positive' : 'negative'}`;
+          card.innerHTML = `
+            <h2>${stock.ticker}</h2>
+            <p><strong>Price:</strong> $${stock.price}</p>
+            <p><strong>Change:</strong> $${stock.price_change}</p>
+            <p><strong>Change %:</strong> ${stock.percentage_change}%</p>
+          `;
+          container.appendChild(card);
+        });
+
+        currentIndex = (currentIndex + 6) % stocksData.length;
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        fetchStockData();
+        setInterval(displayNextBatch, 20000); // Update every 20 seconds
+      });
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <p>Latest stock data</p>
+    </div>
+    <div class="stock-container">
+      <!-- Stock cards will be dynamically inserted here -->
+    </div>
+  </body>
+</html>

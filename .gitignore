@@ -1,0 +1,100 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+.env/
+
+# Python cache
+*.egg-info/
+*.egg
+*.pyo
+*.pyd
+*.pyc
+
+# Logs and local files
+*.log
+*.sqlite3
+*.db
+*.sqlite
+
+# Flask-related
+instance/
+*.bak
+*.swp
+*.swo
+
+# Config files
+config.json
+config.yaml
+config.yml
+.env
+
+# Static and media uploads (if applicable)
+staticfiles/
+media/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.manifest
+*.spec
+
+# PyInstaller
+*.spec
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.dll
+*.dylib
+*.exe
+*.app
+
+# Editors and IDEs
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Testing
+.coverage
+.tox/
+.nox/
+htmlcov/
+.pytest_cache/
+*.cover
+nosetests.xml
+coverage.xml
+*.mo
+*.pot
+
+# Security and credentials
+secrets.json
+key.pem
+cert.pem
+*.crt
+*.key
+node_modules/
