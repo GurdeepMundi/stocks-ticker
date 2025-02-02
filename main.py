@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, render_template
 import yfinance as yf
 import pandas as pd
 from apscheduler.schedulers.background import BackgroundScheduler
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -35,7 +36,8 @@ def fetch_stock_data():
             'percentage_change': round(percentage_change, 2)
         })
     
-    return stocks_data
+    last_updated = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return stocks_data, last_updated
 
 @app.route('/')
 def home():
@@ -43,15 +45,15 @@ def home():
 
 @app.route('/get_stock_data', methods=['GET'])
 def get_stock_data():
-    stocks_data = fetch_stock_data()
-    return jsonify(stocks_data)
+    stocks_data, last_updated = fetch_stock_data()
+    return jsonify({'stocks': stocks_data, 'last_updated': last_updated})
 
 def scheduled_task():
     fetch_stock_data()
 
 if __name__ == '__main__':
     scheduler = BackgroundScheduler()
-    scheduler.add_job(scheduled_task, 'interval', minutes=1)
+    scheduler.add_job(scheduled_task, 'interval', seconds=30)
     scheduler.start()
     
     app.run(debug=True)
